@@ -1,0 +1,14 @@
+{
+  "name": "bond-yield-calculator",
+  "private": true,
+  "description": "Bond yield calculator monorepo",
+  "scripts": {
+    "dev:backend": "pnpm --filter backend run start:dev",
+    "dev:frontend": "pnpm --filter frontend run dev",
+    "build:backend": "pnpm --filter backend run build",
+    "build:frontend": "pnpm --filter frontend run build"
+  },
+  "engines": {
+    "packageManager": "pnpm>=9.0.0"
+  }
+}
