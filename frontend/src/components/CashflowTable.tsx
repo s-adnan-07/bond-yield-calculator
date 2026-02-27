@@ -22,30 +22,28 @@ type Props = { cashflowSchedule: CashflowRecord[] }
 
 function CashflowTable({ cashflowSchedule }: Props) {
   return (
-    <>
-      <TableContainer component={Paper} sx={{ p: 0 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
+    <TableContainer component={Paper} sx={{ p: 0 }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            {cashflowColumns.map((column) => (
+              <TableCell>{column.label}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {cashflowSchedule.map((row) => (
+            <TableRow
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
               {cashflowColumns.map((column) => (
-                <TableCell>{column.label}</TableCell>
+                <TableCell>{row[column.key]}</TableCell>
               ))}
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {cashflowSchedule.map((row) => (
-              <TableRow
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                {cashflowColumns.map((column) => (
-                  <TableCell>{row[column.key]}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 

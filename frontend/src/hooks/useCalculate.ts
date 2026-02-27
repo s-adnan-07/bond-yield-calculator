@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import type { InputState, OutputState } from '@/types'
 
 // We are using null here instead of 0 because, 0 is a valid number and it will be treated as a number.
@@ -18,8 +18,14 @@ function useCalculate() {
     () => initialInputState,
   )
   const [outputState, setoutputState] = useState<OutputState | null>(() => null)
+  const [errorMessages, setErrorMessages] = useState<string[] | null>(
+    () => null,
+  )
 
-  const { refetch } = useQuery<OutputState>({
+  const { refetch, isLoading } = useQuery<
+    OutputState,
+    AxiosError<{ message: string[] }>
+  >({
     queryKey: ['calculate'],
     queryFn: calculate,
     enabled: false,
@@ -41,7 +47,8 @@ function useCalculate() {
   }
 
   // For TextField
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleInputChange(e: React.ChangeEvent<HTMLFormElement>) {
+    setErrorMessages(null)
     setInputState((prevState) => ({
       ...prevState,
       [e.target.name]: Number(e.target.value),
@@ -56,33 +63,37 @@ function useCalculate() {
   }
 
   function handleClear() {
+    setErrorMessages(null)
     setInputState(initialInputState)
     setoutputState(null)
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
+    setErrorMessages(null)
 
-    const { data } = await refetch()
+    // Data contains "last successful fetch result"
+    // Therefore if the query fails the data will contain stale values
+    const { data, error } = await refetch()
+
+    if (error) {
+      setErrorMessages(() => error.response?.data.message ?? null)
+      return
+    }
     if (!data) return
 
     setoutputState(data)
   }
 
-  function formatPercent(value: number) {
-    const percent = value * 100
-
-    return percent.toFixed(3) + '%'
-  }
-
   return {
     outputState,
     inputState,
+    isLoading,
+    errorMessages,
     handleSubmit,
     handleDecimalInput,
     handleInputChange,
     handleClear,
-    formatPercent,
   }
 }
 

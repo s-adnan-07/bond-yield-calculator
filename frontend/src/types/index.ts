@@ -1,3 +1,5 @@
+export type Severity = 'error' | 'info' | 'success' | 'warning'
+
 export interface CashflowRecord {
   period: number
   cashFlow: number
