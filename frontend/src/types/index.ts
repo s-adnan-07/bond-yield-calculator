@@ -1,5 +1,26 @@
 export type Severity = 'error' | 'info' | 'success' | 'warning'
 
+export type SelectionChangeEvent =
+  | React.ChangeEvent<HTMLInputElement, Element>
+  | (Event & {
+      target: {
+        value: null
+        name: string
+      }
+    })
+  | React.ChangeEvent<
+      Omit<HTMLInputElement, 'value'> & {
+        value: number
+      },
+      Element
+    >
+  | (Event & {
+      target: {
+        value: number
+        name: string
+      }
+    })
+
 export interface CashflowRecord {
   period: number
   cashFlow: number
@@ -21,5 +42,6 @@ export interface InputState<T = number> {
   marketPrice: T | null
   annualCouponRate: T | null
   yearsToMaturity: T | null
-  couponFrequency: T | null
+  // couponFrequency: T | null
+  couponFrequency: 1 | 2 | 4 | 12
 }

@@ -5,7 +5,11 @@ import Typography from '@mui/material/Typography'
 import InputAdornment from '@mui/material/InputAdornment'
 import Button from '@mui/material/Button'
 
-import type { InputState } from '@/types'
+import type { InputState, SelectionChangeEvent } from '@/types'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
 
 type Props = {
   onSubmit?: React.SubmitEventHandler<HTMLFormElement>
@@ -13,6 +17,7 @@ type Props = {
   inputState: InputState
   isLoading: boolean
   handleClear?: () => void
+  handleSelectionChange?: (e: SelectionChangeEvent) => void
 }
 
 function InputCard({
@@ -21,6 +26,7 @@ function InputCard({
   inputState,
   isLoading,
   handleClear,
+  handleSelectionChange,
 }: Props) {
   return (
     <Paper
@@ -67,12 +73,27 @@ function InputCard({
           value={inputState.yearsToMaturity ?? ''}
         />
 
-        <TextField
+        {/* <TextField
           name="couponFrequency"
           label="Coupon Frequency"
           type="number"
           value={inputState.couponFrequency ?? ''}
-        />
+        /> */}
+
+        <FormControl fullWidth>
+          <InputLabel>Coupon Frequency</InputLabel>
+          <Select
+            name="couponFrequency"
+            label="Coupon Frequency"
+            value={inputState.couponFrequency}
+            onChange={handleSelectionChange}
+          >
+            <MenuItem value={12}>Monthly</MenuItem>
+            <MenuItem value={4}>Quarterly</MenuItem>
+            <MenuItem value={2}>Semi-Annually</MenuItem>
+            <MenuItem value={1}>Annually</MenuItem>
+          </Select>
+        </FormControl>
 
         <Button
           type="submit"

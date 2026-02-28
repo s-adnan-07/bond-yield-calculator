@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
-import type { InputState, OutputState } from '@/types'
+import type { InputState, OutputState, SelectionChangeEvent } from '@/types'
 
 // We are using null here instead of 0 because, 0 is a valid number and it will be treated as a number.
 // Null helps us clear the input fields when the user clicks the clear button.
@@ -10,7 +10,7 @@ const initialInputState: InputState = {
   marketPrice: null,
   annualCouponRate: null,
   yearsToMaturity: null,
-  couponFrequency: null,
+  couponFrequency: 1,
 }
 
 function useCalculate() {
@@ -55,10 +55,10 @@ function useCalculate() {
     }))
   }
 
-  function handleDecimalInput(e: React.FocusEvent<HTMLInputElement>) {
+  function handleSelectionChange(e: SelectionChangeEvent) {
     setInputState((prevState) => ({
       ...prevState,
-      [e.target.name]: Number(e.target.value) / 100,
+      [e.target.name]: Number(e.target.value),
     }))
   }
 
@@ -91,7 +91,7 @@ function useCalculate() {
     isLoading,
     errorMessages,
     handleSubmit,
-    handleDecimalInput,
+    handleSelectionChange,
     handleInputChange,
     handleClear,
   }

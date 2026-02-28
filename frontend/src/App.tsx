@@ -17,6 +17,7 @@ function App() {
     handleSubmit,
     handleInputChange,
     handleClear,
+    handleSelectionChange,
   } = useCalculate()
 
   return (
@@ -28,6 +29,7 @@ function App() {
           inputState={inputState}
           isLoading={isLoading}
           handleClear={handleClear}
+          handleSelectionChange={handleSelectionChange}
         />
         {errorMessages && <AlertStack messages={errorMessages} />}
         {outputState && <OutputCard outputState={outputState} />}
