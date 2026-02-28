@@ -1,0 +1,48 @@
+# Dependencies (reinstalled in container)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build output (rebuilt in container)
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE and editor
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Tests (not needed in production image)
+test
+coverage
+*.spec.ts
+*.test.ts
+__tests__
+__mocks__
+jest-e2e.json
+jest.config.*
+
+# Documentation (optional, keeps image smaller)
+README.md
+*.md
+
+# Linting and formatting config (not needed at runtime)
+.eslintcache
+.prettierrc
+eslint.config.mjs
+
+# OS
+.DS_Store
+Thumbs.db
