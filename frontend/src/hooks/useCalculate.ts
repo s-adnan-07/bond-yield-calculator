@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
 import type { InputState, OutputState, SelectionChangeEvent } from '@/types'
+import { VITE_SERVER_URL } from '../constants'
 
 // We are using null here instead of 0 because, 0 is a valid number and it will be treated as a number.
 // Null helps us clear the input fields when the user clicks the clear button.
@@ -39,8 +40,11 @@ function useCalculate() {
     if (annualCouponRate) annualCouponRate /= 100
 
     const { data } = await axios.post<OutputState>(
-      'http://localhost:3000/api/calculate',
-      { ...input, annualCouponRate },
+      `${VITE_SERVER_URL}/calculate`,
+      {
+        ...input,
+        annualCouponRate,
+      },
     )
 
     return data

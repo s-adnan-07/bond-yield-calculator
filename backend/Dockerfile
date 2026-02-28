@@ -31,13 +31,15 @@ RUN pnpm install --frozen-lockfile --prod
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+# ENV PORT=${PORT}
 
 COPY --from=prod-deps /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=prod-deps /app/backend/node_modules ./backend/node_modules
 COPY --from=build /app/backend/dist ./backend/dist
 COPY --from=build /app/backend/package.json ./backend/package.json
+# COPY .env .env
 
 WORKDIR /app/backend
-EXPOSE 3000
+# EXPOSE ${PORT}
 CMD ["node", "dist/main.js"]

@@ -4,17 +4,17 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    env_file:
+      - .env
     ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-      # - API_PREFIX=api  # optional, default is "api"
+      - "${SERVER_PORT}:${SERVER_PORT}"
 
   frontend:
     container_name: frontend
     build:
       context: .
       dockerfile: frontend/Dockerfile
+    env_file:
+      - .env
     ports:
-      - "80:80"
+      - "${CLIENT_PORT}:80"
