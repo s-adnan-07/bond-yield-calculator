@@ -6,6 +6,41 @@ A monorepo containing a bond yield calculator with a NestJS backend and a React 
 
 ---
 
+## Features
+
+### What the app does
+
+- **Inputs** — You provide bond parameters; the app computes yields and a cash flow schedule.
+- **Inputs it takes:**
+
+  | Input                | Description                                      | Constraints / notes                          |
+  | -------------------- | ------------------------------------------------ | -------------------------------------------- |
+  | Face value           | Par value of the bond                            | Positive, max 1,000,000,000                  |
+  | Market price         | Current price you pay for the bond               | Positive, max 1,000,000,000                  |
+  | Annual coupon rate   | Stated annual coupon as a percentage             | Positive, max 100%                           |
+  | Years to maturity   | Time until the bond repays face value            | Positive, max 100 years                     |
+  | Coupon frequency    | How often coupons are paid per year              | Annual (1), Semi-annual (2), Quarterly (4), Monthly (12) |
+
+- **Values it calculates:**
+
+  | Output              | Description                                                                 |
+  | ------------------- | --------------------------------------------------------------------------- |
+  | **Current yield**   | Annual coupon income ÷ market price (decimal, 5 decimal places).             |
+  | **Yield to Maturity (YTM)** | Annualised IRR that equates market price to all future cash flows (coupons + face at maturity). |
+  | **Total interest**  | Total coupon payments over the life of the bond (annual rate × face × years). |
+  | **Premium / Discount / Par** | Whether the bond trades above face (Premium), below (Discount), or at Par.   |
+  | **Cash flow schedule** | Table by period: **payment date** (ISO date YYYY-MM-DD: settlement date for period 0, then each coupon/principal payment date based on frequency), cash flow, coupon payment, cumulative interest, remaining principal (includes initial purchase as period 0). |
+
+### Technical features
+
+- **Rate limiting** — Configurable throttling (`THROTTLE_TTL`, `THROTTLE_LIMIT`, `THROTTLE_ERROR_MESSAGE`) to protect the API.
+- **Input validation** — Backend validates all inputs (positive numbers, max bounds, allowed coupon frequency) and returns clear error messages.
+- **Monorepo** — pnpm workspace with shared scripts; backend (NestJS) and frontend (React + Vite) in one repo.
+- **Docker** — Single `docker compose` setup for backend and frontend with a root `.env`.
+- **Live tests** — Scripts to run smoke tests against a running API and frontend (`pnpm test:live:api`, `pnpm test:live:frontend`, `pnpm test:live`).
+
+---
+
 ## Running with Docker
 
 ### Prerequisites
