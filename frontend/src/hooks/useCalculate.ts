@@ -25,7 +25,7 @@ function useCalculate() {
 
   const { refetch, isLoading } = useQuery<
     OutputState,
-    AxiosError<{ message: string[] }>
+    AxiosError<{ message: string[] | string }>
   >({
     queryKey: ['calculate'],
     queryFn: calculate,
@@ -81,7 +81,16 @@ function useCalculate() {
     const { data, error } = await refetch()
 
     if (error) {
-      setErrorMessages(() => error.response?.data.message ?? null)
+      if (!error.response) {
+        setErrorMessages(() => [error.message])
+        return
+      }
+
+      setErrorMessages(
+        !Array.isArray(error.response?.data.message)
+          ? [error.response?.data.message ?? null]
+          : error.response?.data.message,
+      )
       return
     }
     if (!data) return
