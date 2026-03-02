@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
+// import { APP_GUARD } from '@nestjs/core';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
@@ -18,11 +19,18 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      // .overrideProvider(APP_GUARD)
+      // .useValue({ canActivate: () => true })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
+  });
+
+  afterEach(async () => {
+    await app?.close();
   });
 
   it('/ (GET) should return 200 and Hello World!', () => {
@@ -62,9 +70,5 @@ describe('AppController (e2e)', () => {
           res.body.message.some((m: string) => m.includes('Coupon frequency')),
         ).toBe(true);
       });
-  });
-
-  afterAll(async () => {
-    await app.close();
   });
 });
