@@ -6,7 +6,10 @@
     "dev:backend": "pnpm --filter backend run start:dev",
     "dev:frontend": "pnpm --filter frontend run dev",
     "build:backend": "pnpm --filter backend run build",
-    "build:frontend": "pnpm --filter frontend run build"
+    "build:frontend": "pnpm --filter frontend run build",
+    "test:live:api": "node scripts/test-live-api.mjs",
+    "test:live:frontend": "node scripts/test-live-frontend.mjs",
+    "test:live": "node scripts/test-live-api.mjs && node scripts/test-live-frontend.mjs"
   },
   "engines": {
     "packageManager": "pnpm>=9.0.0"
