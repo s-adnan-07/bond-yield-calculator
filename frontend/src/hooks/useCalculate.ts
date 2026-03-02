@@ -83,6 +83,7 @@ function useCalculate() {
     if (error) {
       if (!error.response) {
         setErrorMessages(() => [error.message])
+        setoutputState(null)
         return
       }
 
@@ -91,6 +92,7 @@ function useCalculate() {
           ? [error.response?.data.message ?? null]
           : error.response?.data.message,
       )
+      setoutputState(null)
       return
     }
     if (!data) return
