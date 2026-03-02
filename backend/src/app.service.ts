@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InputDto } from './dtos/input.dto';
-import IRR from './utils/irr';
+import type { AddMonthsFn } from './utils/addMonths';
+import type IRR from './utils/irr';
 
 // TODO: Work on input validation
 // TODO: Implement JSDOC
@@ -9,7 +10,10 @@ import IRR from './utils/irr';
 export class AppService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
 
-  constructor(@Inject('IRR') private readonly irr: typeof IRR) {}
+  constructor(
+    @Inject('ADD_MONTHS') private readonly addMonths: AddMonthsFn,
+    @Inject('IRR') private readonly irr: typeof IRR,
+  ) {}
 
   onModuleInit() {
     this.logger.log('AppService initialized');
@@ -116,10 +120,14 @@ export class AppService implements OnModuleInit {
     const couponPayment = (faceValue * annualCouponRate) / couponFrequency;
     let cumulativeInterest = 0;
 
+    const settlementDate = new Date();
+    const monthsPerPeriod = 12 / couponFrequency;
+
     // Initial cashflow, i.e. bond purchase
     const cashflowSchedule = [
       {
         period: 0,
+        paymentDate: settlementDate.toISOString().split('T')[0],
         cashFlow: -marketPrice,
         couponPayment: 0,
         cumulativeInterest: 0,
@@ -133,8 +141,14 @@ export class AppService implements OnModuleInit {
       let cashFlow = couponPayment + (i === totalCoupons - 1 ? faceValue : 0);
       let remainingBalance = i === totalCoupons - 1 ? 0 : faceValue;
 
+      const paymentDate = this.addMonths(
+        settlementDate,
+        (i + 1) * monthsPerPeriod,
+      );
+
       cashflowSchedule.push({
         period: i + 1,
+        paymentDate: paymentDate.toISOString().split('T')[0],
         cashFlow,
         couponPayment,
         cumulativeInterest,

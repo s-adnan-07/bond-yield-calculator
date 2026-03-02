@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import addMonths from './utils/addMonths';
 import IRR from './utils/irr';
 
 @Module({
@@ -30,6 +31,7 @@ import IRR from './utils/irr';
   controllers: [AppController],
   providers: [
     AppService,
+    { provide: 'ADD_MONTHS', useValue: addMonths },
     { provide: 'IRR', useValue: IRR },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],

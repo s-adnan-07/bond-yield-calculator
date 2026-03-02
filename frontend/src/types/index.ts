@@ -23,6 +23,7 @@ export type SelectionChangeEvent =
 
 export interface CashflowRecord {
   period: number
+  paymentDate: string
   cashFlow: number
   couponPayment: number
   cumulativeInterest: number

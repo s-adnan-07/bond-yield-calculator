@@ -12,6 +12,7 @@ type CashflowColumnKey = keyof CashflowRecord
 
 const cashflowColumns: { key: CashflowColumnKey; label: string }[] = [
   { key: 'period', label: 'Period' },
+  { key: 'paymentDate', label: 'Payment Date' },
   { key: 'cashFlow', label: 'Cash Flow' },
   { key: 'couponPayment', label: 'Coupon Payment' },
   { key: 'cumulativeInterest', label: 'Cumulative Interest' },

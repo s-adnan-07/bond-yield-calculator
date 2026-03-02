@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppService } from './app.service';
+import addMonths from './utils/addMonths';
 
 describe('AppService', () => {
   let appService: AppService;
@@ -11,6 +12,7 @@ describe('AppService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AppService,
+        { provide: 'ADD_MONTHS', useValue: addMonths },
         {
           provide: 'IRR',
           useValue: irrMock,
@@ -110,8 +112,10 @@ describe('AppService', () => {
         2,
       );
 
+      const expectedSettlementDate = new Date().toISOString().split('T')[0];
       expect(schedule[0]).toEqual({
         period: 0,
+        paymentDate: expectedSettlementDate,
         cashFlow: -980,
         couponPayment: 0,
         cumulativeInterest: 0,
